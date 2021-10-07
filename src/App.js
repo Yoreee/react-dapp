@@ -1,14 +1,24 @@
-import logo from './logo.svg';
 import './App.css';
 import Greeter from './artifacts/contracts/Greeter.sol/Greeter.json'
 import { useState } from 'react';
+import { ethers } from "ethers";
 
-// Set address
-const GreeterAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+
+/* 
+--- SET ADDRESS ---
+
+This is the address that gets returned when you deploy 
+(npx hardhat run scripts/deploy.js --network localhost) 
+your contract. This is the address of your smart contract. 
+It is your contract address.
+
+*/
+const greeterAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+// const greeterAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
 
 function App() {
 
-  const [greeting, setGreetingValue] = useState();
+  const [greeting, setGreetingValue] = useState('');
 
   async function requestAccount() {
     // use window.ethereum.request to prompt metamask sign-in
@@ -16,7 +26,7 @@ function App() {
   }
 
   async function fetchGreeting() {
-
+    console.log('FETCHING...')
     // Check if metamask exists. 
     if (typeof window.ethereum !== 'undefined') {
 
@@ -28,16 +38,16 @@ function App() {
       const contract = new ethers.Contract(greeterAddress, Greeter.abi, provider)
       
       try { 
-        const data = contract.greet()
+        const data = await contract.greet()
         console.log('data: ', data)
       } catch (err) {
         console.log("error: ", err)
       }
-
     }
   }
 
   async function setGreeting() {
+    
     if (!greeting) return
     if (typeof window.ethereum !== 'undefined') {
       await requestAccount();
@@ -48,24 +58,18 @@ function App() {
       await transaction.wait()
       fetchGreeting()
     }
-
   }
   
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <button onClick={fetchGreeting}>Fetch Greeting</button>
+        <button onClick={setGreeting}> Set Greeting</button>
+        <input 
+          onChange={e => setGreetingValue(e.target.value)} 
+          placeholder="Set greeting..."
+          value={greeting}  
+        ></input>
       </header>
     </div>
   );
