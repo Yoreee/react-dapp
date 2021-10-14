@@ -14,3 +14,6 @@ node scripts/sample-script.js
 npx hardhat help
 npx hardhat run scripts/deploy.js --network localhost
 ```
+
+Tutorial:
+https://www.youtube.com/watch?v=a0osIaAOFSE&t=17s
