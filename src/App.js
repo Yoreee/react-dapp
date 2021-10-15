@@ -13,7 +13,7 @@ your contract. This is the address of your smart contract.
 It is your contract address.
 
 */
-const greeterAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+const greeterAddress = "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9"
 // const greeterAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
 
 function App() {
@@ -59,12 +59,28 @@ function App() {
       fetchGreeting()
     }
   }
+
+  async function sayHello() {
+    if (typeof window.ethereum !== 'undefined') {
+      const provider = new ethers.providers.Web3Provider(window.ethereum)
+      const contract = new ethers.Contract(greeterAddress, Greeter.abi, provider)
+
+      try {
+        const sayhello = await contract.sayHello()
+        console.log(sayhello)
+      }
+      catch (err) {
+        console.log(err)
+      } 
+    }
+  }
   
   return (
     <div className="App">
       <header className="App-header">
         <button onClick={fetchGreeting}>Fetch Greeting</button>
         <button onClick={setGreeting}> Set Greeting</button>
+        <button onClick={sayHello}> HELLO?</button>
         <input 
           onChange={e => setGreetingValue(e.target.value)} 
           placeholder="Set greeting..."

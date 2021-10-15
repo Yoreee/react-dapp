@@ -19,4 +19,11 @@ contract Greeter {
         console.log("Changing greeting from '%s' to '%s'", greeting, _greeting);
         greeting = _greeting;
     }
+
+    function sayHello() public pure returns (string memory) {
+        
+        return "HELLO MUH FUCKA";
+    }
+
+
 }
